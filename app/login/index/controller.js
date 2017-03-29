@@ -1,26 +1,22 @@
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
-  queryParams       : ['timedOut','errorMsg', 'resetPassword'],
+  queryParams       : ['timedOut','errorMsg'],
   access            : Ember.inject.service(),
   settings          : Ember.inject.service(),
   intl              : Ember.inject.service(),
 
   isGithub          : Ember.computed.equal('access.provider', 'githubconfig'),
+  isFiware          : Ember.computed.equal('access.provider', 'fiwareconfig'),
   isActiveDirectory : Ember.computed.equal('access.provider', 'ldapconfig'),
   isOpenLdap        : Ember.computed.equal('access.provider', 'openldapconfig'),
   isLocal           : Ember.computed.equal('access.provider', 'localauthconfig'),
   isAzureAd         : Ember.computed.equal('access.provider', 'azureadconfig'),
   isShibboleth      : Ember.computed.equal('access.provider', 'shibbolethconfig'),
-  isCaas            : Ember.computed('app.mode', function() {
-    return this.get('app.mode') === 'caas' ? true : false;
-  }),
-  promptPasswordReset: false,
 
   timedOut          : false,
   waiting           : false,
   errorMsg          : null,
-  resetPassword           : false,
 
   actions: {
     started() {
@@ -70,12 +66,6 @@ export default Ember.Controller.extend({
     });
   }.on('init'),
 
-  showPasswordReset: Ember.observer('resetPassword', function() {
-    if (this.get('resetPassword')) {
-      this.set('promptPasswordReset', true);
-    }
-  }),
-
   infoMsg: function() {
     if ( this.get('errorMsg') ) {
       return this.get('errorMsg');
@@ -85,4 +75,5 @@ export default Ember.Controller.extend({
       return '';
     }
   }.property('timedOut','errorMsg','intl._locale'),
+
 });

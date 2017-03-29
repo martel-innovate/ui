@@ -45,6 +45,7 @@ Router.map(function() {
         this.route('activedirectory');
         this.route('azuread');
         this.route('github');
+        this.route('fiware');
         this.route('openldap');
         this.route('localauth', {path: 'local'});
         this.route('shibboleth');

@@ -2,10 +2,10 @@ import Ember from 'ember';
 
 export default Ember.Route.extend({
   activate: function() {
-    $('BODY').addClass('container-farm');
+    $('BODY').addClass('farm');
   },
 
   deactivate: function() {
-    $('BODY').removeClass('container-farm');
+    $('BODY').removeClass('farm');
   }
 });
