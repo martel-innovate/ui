@@ -35,7 +35,6 @@ export default Ember.Service.extend({
   },
 
   stateMatches: function(actual) {
-    //print(actual);
     return actual;
     //var expected = this.get('session.fiwareState');
     //return actual && expected === actual;
@@ -66,6 +65,7 @@ export default Ember.Service.extend({
     window.onFiwareTest = function(err,code) {
       if ( !responded ) {
         responded = true;
+        console.log("Got code: "+code);
         cb(err,code);
       }
     };

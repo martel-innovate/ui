@@ -5,6 +5,7 @@ export default Ember.Route.extend({
   access         : Ember.inject.service(),
   cookies        : Ember.inject.service(),
   github         : Ember.inject.service(),
+  fiware         : Ember.inject.service(),
   language       : Ember.inject.service('user-language'),
   modal          : Ember.inject.service(),
   settings       : Ember.inject.service(),
@@ -144,20 +145,23 @@ export default Ember.Route.extend({
   },
 
   model(params, transition) {
-    let github   = this.get('github');
+    //let github   = this.get('github');
+    let fiware   = this.get('fiware');
     let stateMsg = 'Authorization state did not match, please try again.';
 
     this.get('language').initLanguage();
 
     if (params.isPopup) {
+      console.log("is popup");
       this.controllerFor('application').set('isPopup', true);
     }
 
-    if ( params.isTest ) {
-      if ( github.stateMatches(params.state) ) {
-        reply(params.error_description, params.code);
+    if ( window.opener && window.opener !== window ) {
+      console.log("is test");
+      if ( fiware.stateMatches(params.state) ) {
+        replyFiware(params.error_description, params.code);
       } else {
-        reply(stateMsg);
+        replyFiware(stateMsg);
       }
 
       transition.abort();
@@ -165,8 +169,8 @@ export default Ember.Route.extend({
       return Ember.RSVP.reject('isTest');
 
     } else if ( params.code ) {
-
-      if ( github.stateMatches(params.state) ) {
+      console.log("is params code");
+      if ( fiware.stateMatches(params.state) ) {
         return this.get('access').login(params.code).then(() => {
           // Abort the orignial transition that was coming in here since
           // we'll redirect the user manually in finishLogin
@@ -194,9 +198,10 @@ export default Ember.Route.extend({
       }
     }
 
-    function reply(err,code) {
+    function replyFiware(err,code) {
+      console.log("replyFiware");
       try {
-        window.opener.window.onGithubTest(err,code);
+        window.opener.window.onFiwareTest(err,code);
         setTimeout(function() {
           window.close();
         },250);
