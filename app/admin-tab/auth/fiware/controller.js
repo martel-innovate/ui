@@ -103,7 +103,7 @@ export default Ember.Controller.extend({
 
       this.get('model').setProperties({
         'provider'          : 'fiwareconfig',
-        'enabled'           : false, // It should already be, but just in case..
+        'enabled'           : true, // It should already be, but just in case..
         'accessMode'        : 'unrestricted',
         'allowedIdentities' : [],
       });
@@ -126,6 +126,10 @@ export default Ember.Controller.extend({
             saved: true,
             haveToken: true,
           });
+          $('#loading-underlay, #loading-overlay').removeClass('hide').show();
+          setTimeout(function() {
+            window.location.href = "/login";
+          }, 2000);
         }).catch((err) => {
           this.setProperties({
             saving: false,
